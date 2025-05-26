@@ -1,4 +1,4 @@
-# #!/usr/bin/env python
+#!/usr/bin/env python
 # import config
 # import adafruit_max31855
 # import digitalio
@@ -43,7 +43,7 @@ import time
 import config
 
 
-print("relay output pin configured as invert = %r\n" % (config.gpio_main_kiln_relay))
+print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n" % (config.gpio_main_kiln_relay))
 
 # Define the GPIO pin number
 RELAY_PIN = config.gpio_main_kiln_relay
