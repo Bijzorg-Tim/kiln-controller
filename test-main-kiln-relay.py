@@ -16,8 +16,10 @@ GPIO.setup(RELAY_PIN, GPIO.OUT)
 try:
     while True:
         GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
+        print("turning on " + RELAY_PIN)
         time.sleep(3)                      # Wait 3 seconds
         GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+        print("turning off " + RELAY_PIN)
         time.sleep(3)                      # Wait 3 seconds
 
 except KeyboardInterrupt:

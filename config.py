@@ -90,7 +90,7 @@ try:
     spi_mosi  = board.D10    #spi Microcomputer Out Serial In (not connected) 
     gpio_heat = board.D17    #output that controls relay
     gpio_heat_invert = True #invert the output state
-    gpio_main_kiln_relay = 23
+    gpio_main_kiln_relay = 27
 except (NotImplementedError,AttributeError):
     print("not running on blinka recognized board, probably a simulation")
 
