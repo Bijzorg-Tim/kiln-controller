@@ -7,6 +7,8 @@ print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n"
 
 # Define the GPIO pin number
 RELAY_PIN = config.gpio_main_kiln_relay
+print("pin:")
+print(RELAY_PIN)
 # Setup
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RELAY_PIN, GPIO.OUT)
