@@ -84,12 +84,13 @@ currency_type   = "$"   # Currency Symbol to show when calculating cost to run j
 
 try:
     import board
-    spi_sclk  = board.D17    #spi clock
-    spi_miso  = board.D27    #spi Microcomputer In Serial Out
-    spi_cs    = board.D22    #spi Chip Select
+    spi_sclk  = board.D11    #spi clock
+    spi_miso  = board.D9    #spi Microcomputer In Serial Out
+    spi_cs    = board.D8    #spi Chip Select
     spi_mosi  = board.D10    #spi Microcomputer Out Serial In (not connected) 
-    gpio_heat = board.D23    #output that controls relay
-    gpio_heat_invert = False #invert the output state
+    gpio_heat = board.D17    #output that controls relay
+    gpio_heat_invert = True #invert the output state
+    gpio_main_kiln_relay = board.D23
 except (NotImplementedError,AttributeError):
     print("not running on blinka recognized board, probably a simulation")
 
@@ -99,11 +100,11 @@ except (NotImplementedError,AttributeError):
 # There are only two breakoutboards supported. 
 #   max31855 - only supports type K thermocouples
 #   max31856 - supports many thermocouples
-max31855 = 1
-max31856 = 0
+max31855 = 0
+max31856 = 1
 # uncomment these two lines if using MAX-31856
 import adafruit_max31856
-thermocouple_type = adafruit_max31856.ThermocoupleType.K
+thermocouple_type = adafruit_max31856.ThermocoupleType.S
 
 # here are the possible max-31856 thermocouple types
 #   ThermocoupleType.B
@@ -176,7 +177,7 @@ sim_speedup_factor = 1
 #
 # If you change the temp_scale, all settings in this file are assumed to
 # be in that scale.
-temp_scale          = "f" # c = Celsius | f = Fahrenheit - Unit to display
+temp_scale          = "c" # c = Celsius | f = Fahrenheit - Unit to display
 time_scale_slope    = "h" # s = Seconds | m = Minutes | h = Hours - Slope displayed in temp_scale per time_scale_slope
 time_scale_profile  = "m" # s = Seconds | m = Minutes | h = Hours - Enter and view target time in time_scale_profile
 
@@ -214,7 +215,7 @@ thermocouple_offset=0
 temperature_average_samples = 10 
 
 # Thermocouple AC frequency filtering - set to True if in a 50Hz locale, else leave at False for 60Hz locale
-ac_freq_50hz = False
+ac_freq_50hz = True
 
 ########################################################################
 # Emergencies - or maybe not
@@ -255,7 +256,7 @@ ignore_tc_too_many_errors = False
 # cleaned up (deleted) by the OS on boot.
 # The state file is written to disk every sensor_time_wait seconds (2s by default)
 # and is written in the same directory as config.py.
-automatic_restarts = True
+automatic_restarts = False
 automatic_restart_window = 15 # max minutes since power outage
 automatic_restart_state_file = os.path.abspath(os.path.join(os.path.dirname( __file__ ),'state.json'))
 
