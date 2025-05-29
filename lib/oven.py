@@ -13,10 +13,12 @@ import RPi.GPIO as GPIO
 
 log = logging.getLogger(__name__)
 
-RELAY_PIN = int(config.gpio_main_kiln_relay)
-# Setup
 GPIO.setmode(GPIO.BCM)
+RELAY_PIN = int(config.gpio_main_kiln_relay)
 GPIO.setup(RELAY_PIN, GPIO.OUT)
+# Setup
+
+
 
 
 class DupFilter(object):
@@ -47,18 +49,18 @@ class Output(object):
     '''
     def __init__(self):
         self.active = False
-        self.heater = digitalio.DigitalInOut(config.gpio_heat) 
-        self.heater.direction = digitalio.Direction.OUTPUT 
-        self.off = config.gpio_heat_invert
-        self.on = not self.off
+        # self.heater = digitalio.DigitalInOut(config.gpio_heat) 
+        # self.heater.direction = digitalio.Direction.OUTPUT 
+        # self.off = config.gpio_heat_invert
+        # self.on = not self.off
 
     def heat(self,sleepfor):
-        self.heater.value = self.on
+        # self.heater.value = self.on
         time.sleep(sleepfor)
 
     def cool(self,sleepfor):
         '''no active cooling, so sleep'''
-        self.heater.value = self.off
+        # self.heater.value = self.off
         time.sleep(sleepfor)
 
 # wrapper for blinka board
