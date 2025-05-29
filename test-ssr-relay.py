@@ -4,6 +4,18 @@ import adafruit_max31855
 import digitalio
 import time
 import datetime
+import RPi.GPIO as GPIO
+
+print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n" % (config.gpio_main_kiln_relay))
+
+# Define the GPIO pin number
+RELAY_PIN = int(config.gpio_main_kiln_relay)
+print("pin:")
+print(RELAY_PIN)
+# Setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT)
+
 
 try:
     import board
@@ -38,10 +50,20 @@ print("\nboard: %s" % (board.board_id))
 print("heater configured as config.gpio_heat = %s BCM pin\n" % (config.gpio_heat))
 print("heater output pin configured as invert = %r\n" % (config.gpio_heat_invert))
 
-while True:
-    heater.value = on
-    print("%s heater on" % datetime.datetime.now())
-    time.sleep(5)
-    heater.value = off
-    print("%s heater off" % datetime.datetime.now())
-    time.sleep(5)
+try:
+    GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
+    while True:
+        heater.value = on
+        print("%s heater on" % datetime.datetime.now())
+        time.sleep(5)
+        heater.value = off
+        print("%s heater off" % datetime.datetime.now())
+        time.sleep(5)
+
+except KeyboardInterrupt:
+    GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+    print("Interrupted by user")
+
+finally:
+    GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+    GPIO.cleanup()

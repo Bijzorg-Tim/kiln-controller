@@ -9,8 +9,12 @@ import digitalio
 import busio
 import adafruit_bitbangio as bitbangio
 import statistics
+import RPi.GPIO as GPIO
 
 log = logging.getLogger(__name__)
+
+RELAY_PIN = int(config.gpio_main_kiln_relay)
+
 
 class DupFilter(object):
     def __init__(self):
@@ -374,8 +378,18 @@ class Oven(threading.Thread):
         temp1 = self.heat_rate_temps[0][1]
         if time2 > time1:
             self.heat_rate = ((temp2 - temp1) / (time2 - time1))*3600
+            
+    def close_main_oven_relay():
+        GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+        
+    def open_main_oven_relay():
+        RELAY_PIN = int(config.gpio_main_kiln_relay)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(RELAY_PIN, GPIO.OUT)
+        GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
 
     def run_profile(self, profile, startat=0, allow_seek=True):
+        self.open_main_oven_relay()
         log.debug('run_profile run on thread' + threading.current_thread().name)
         runtime = startat * 60
         if allow_seek:
@@ -396,7 +410,10 @@ class Oven(threading.Thread):
 
     def abort_run(self):
         self.reset()
+        self.close_main_oven_relay()
         self.save_automatic_restart_state()
+        
+
 
     def get_start_time(self):
         return datetime.datetime.now() - datetime.timedelta(milliseconds = self.runtime * 1000)
