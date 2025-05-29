@@ -8,15 +8,7 @@ import argparse
 
 import RPi.GPIO as GPIO
 
-print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n" % (config.gpio_main_kiln_relay))
 
-# Define the GPIO pin number
-RELAY_PIN = int(config.gpio_main_kiln_relay)
-print("pin:")
-print(RELAY_PIN)
-# Setup
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(RELAY_PIN, GPIO.OUT)
 
 try:
         sys.dont_write_bytecode = True
@@ -27,6 +19,16 @@ except ImportError:
         print("Could not import config file.")
         print("Copy config.py.EXAMPLE to config.py and adapt it for your setup.")
         exit(1)
+        
+print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n" % (config.gpio_main_kiln_relay))
+
+# Define the GPIO pin number
+RELAY_PIN = int(config.gpio_main_kiln_relay)
+print("pin:")
+print(RELAY_PIN)
+# Setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT)
 
 
 def recordprofile(csvfile, targettemp):
