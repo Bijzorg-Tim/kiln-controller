@@ -95,7 +95,6 @@ def recordprofile(csvfile, targettemp):
 
     finally:
         GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
-        GPIO.cleanup()
         f.close()
         # ensure we always shut the oven down!
         if not config.simulate:
