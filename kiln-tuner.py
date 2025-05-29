@@ -6,6 +6,18 @@ import csv
 import time
 import argparse
 
+import RPi.GPIO as GPIO
+
+print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n" % (config.gpio_main_kiln_relay))
+
+# Define the GPIO pin number
+RELAY_PIN = int(config.gpio_main_kiln_relay)
+print("pin:")
+print(RELAY_PIN)
+# Setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT)
+
 try:
         sys.dont_write_bytecode = True
         import config
@@ -47,6 +59,7 @@ def recordprofile(csvfile, targettemp):
     try:
 
         # heating to target of 400F
+        GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
         temp = 0
         sleepfor = config.sensor_time_wait
         stage = "heating"
@@ -79,6 +92,8 @@ def recordprofile(csvfile, targettemp):
             f.flush()
 
     finally:
+        GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+        GPIO.cleanup()
         f.close()
         # ensure we always shut the oven down!
         if not config.simulate:
