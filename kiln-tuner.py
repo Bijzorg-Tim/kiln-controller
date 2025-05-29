@@ -23,12 +23,12 @@ except ImportError:
 print("main kiln relay configured as config.gpio_main_kiln_relay = %s BCM pin\n" % (config.gpio_main_kiln_relay))
 
 # Define the GPIO pin number
+GPIO.setmode(GPIO.BCM)
 RELAY_PIN = int(config.gpio_main_kiln_relay)
+GPIO.setup(RELAY_PIN, GPIO.OUT)
 print("pin:")
 print(RELAY_PIN)
 # Setup
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(RELAY_PIN, GPIO.OUT)
 
 
 def recordprofile(csvfile, targettemp):
