@@ -15,9 +15,9 @@ log = logging.getLogger(__name__)
 
 GPIO.setmode(GPIO.BCM)
 RELAY_PIN = int(config.gpio_main_kiln_relay)
-SSR_RELAY_PIN = int(config.gpio_ssr_relay)
+# SSR_RELAY_PIN = int(config.gpio_ssr_relay)
 GPIO.setup(RELAY_PIN, GPIO.OUT)
-GPIO.setup(SSR_RELAY_PIN, GPIO.OUT)
+# GPIO.setup(SSR_RELAY_PIN, GPIO.OUT)
 # Setup
 
 
@@ -51,20 +51,20 @@ class Output(object):
     '''
     def __init__(self):
         self.active = False
-        # self.heater = digitalio.DigitalInOut(config.gpio_heat) 
-        # self.heater.direction = digitalio.Direction.OUTPUT 
-        # self.off = config.gpio_heat_invert
-        # self.on = not self.off
+        self.heater = digitalio.DigitalInOut(config.gpio_heat) 
+        self.heater.direction = digitalio.Direction.OUTPUT 
+        self.off = config.gpio_heat_invert
+        self.on = not self.off
 
     def heat(self,sleepfor):
-        # self.heater.value = self.on
-        GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
+        self.heater.value = self.on
+        # GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
         time.sleep(sleepfor)
 
     def cool(self,sleepfor):
         '''no active cooling, so sleep'''
-        GPIO.output(RELAY_PIN, GPIO.LOW)  # Turn ON relay
-        # self.heater.value = self.off
+        # GPIO.output(RELAY_PIN, GPIO.LOW)  # Turn ON relay
+        self.heater.value = self.off
         time.sleep(sleepfor)
 
 # wrapper for blinka board
