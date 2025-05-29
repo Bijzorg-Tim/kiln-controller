@@ -14,6 +14,9 @@ import RPi.GPIO as GPIO
 log = logging.getLogger(__name__)
 
 RELAY_PIN = int(config.gpio_main_kiln_relay)
+# Setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RELAY_PIN, GPIO.OUT)
 
 
 class DupFilter(object):
