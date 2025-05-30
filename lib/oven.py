@@ -388,10 +388,10 @@ class Oven(threading.Thread):
         if time2 > time1:
             self.heat_rate = ((temp2 - temp1) / (time2 - time1))*3600
             
-    def close_main_oven_relay():
+    def close_main_oven_relay(self):
         GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
         
-    def open_main_oven_relay():
+    def open_main_oven_relay(self):
         RELAY_PIN = int(config.gpio_main_kiln_relay)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(RELAY_PIN, GPIO.OUT)
