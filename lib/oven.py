@@ -388,17 +388,17 @@ class Oven(threading.Thread):
         if time2 > time1:
             self.heat_rate = ((temp2 - temp1) / (time2 - time1))*3600
             
-    # def close_main_oven_relay():
-    #     GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+    def close_main_oven_relay():
+        GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
         
-    # def open_main_oven_relay():
-    #     RELAY_PIN = int(config.gpio_main_kiln_relay)
-    #     GPIO.setmode(GPIO.BCM)
-    #     GPIO.setup(RELAY_PIN, GPIO.OUT)
-    #     GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
+    def open_main_oven_relay():
+        RELAY_PIN = int(config.gpio_main_kiln_relay)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(RELAY_PIN, GPIO.OUT)
+        GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
 
     def run_profile(self, profile, startat=0, allow_seek=True):
-        # self.open_main_oven_relay()
+        self.open_main_oven_relay()
         log.debug('run_profile run on thread' + threading.current_thread().name)
         runtime = startat * 60
         if allow_seek:
@@ -419,7 +419,7 @@ class Oven(threading.Thread):
 
     def abort_run(self):
         self.reset()
-        # self.close_main_oven_relay()
+        self.close_main_oven_relay()
         self.save_automatic_restart_state()
         
 
