@@ -2,6 +2,12 @@ import logging
 import os
 from digitalio import DigitalInOut
 import busio
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+
 
 ########################################################################
 #
@@ -14,6 +20,14 @@ log_format = '%(asctime)s %(levelname)s %(name)s: %(message)s'
 ### Server
 listening_port = 8081
 
+
+MQTT_BROKER = os.getenv("MQTT_BROKER")
+MQTT_PORT = os.getenv("MQTT_PORT")
+MQTT_USERNAME = os.getenv("MQTT_USERNAME")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
+
+print(os.getenv("MQTT_BROKER"))
+print(MQTT_BROKER)
 ########################################################################
 # Cost Information
 #
@@ -162,7 +176,11 @@ stop_integral_windup = True
 ########################################################################
 #
 #   Simulation parameters
-simulate = False
+# simulate = True
+if (os.getenv("SIMULATION") == "true"):
+    simulate = True
+else:
+    simulate = False
 sim_t_env      = 65   # deg
 sim_c_heat     = 500.0  # J/K  heat capacity of heat element
 sim_c_oven     = 5000.0 # J/K  heat capacity of oven

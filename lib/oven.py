@@ -10,6 +10,7 @@ import busio
 import adafruit_bitbangio as bitbangio
 import statistics
 import RPi.GPIO as GPIO
+import paho.mqtt.publish as publish
 
 log = logging.getLogger(__name__)
 
@@ -19,6 +20,14 @@ RELAY_PIN = int(config.gpio_main_kiln_relay)
 GPIO.setup(RELAY_PIN, GPIO.OUT)
 # GPIO.setup(SSR_RELAY_PIN, GPIO.OUT)
 # Setup
+
+MQTT_BROKER = config.MQTT_BROKER
+MQTT_PORT = int(config.MQTT_PORT)
+MQTT_TOPIC = "kiln/status"
+
+# Optional username/password
+MQTT_USERNAME = config.MQTT_USERNAME
+MQTT_PASSWORD = config.MQTT_PASSWORD
 
 
 
@@ -390,12 +399,36 @@ class Oven(threading.Thread):
             
     def close_main_oven_relay(self):
         GPIO.output(RELAY_PIN, GPIO.LOW)   # Turn OFF relay
+        publish.single(
+            MQTT_TOPIC,
+            payload="Kiln stopped",
+            hostname=MQTT_BROKER,
+            port=MQTT_PORT,
+            auth={
+                'username': MQTT_USERNAME,
+                'password': MQTT_PASSWORD
+            }
+        )
+        
         
     def open_main_oven_relay(self):
         RELAY_PIN = int(config.gpio_main_kiln_relay)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(RELAY_PIN, GPIO.OUT)
         GPIO.output(RELAY_PIN, GPIO.HIGH)  # Turn ON relay
+        
+        publish.single(
+            MQTT_TOPIC,
+            payload="Kiln started",
+            hostname=MQTT_BROKER,
+            port=MQTT_PORT,
+            auth={
+                'username': MQTT_USERNAME,
+                'password': MQTT_PASSWORD
+            }
+        )
+        
+        
 
     def run_profile(self, profile, startat=0, allow_seek=True):
         self.open_main_oven_relay()
