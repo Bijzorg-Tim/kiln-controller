@@ -498,11 +498,31 @@ class Oven(threading.Thread):
             log.info("emergency!!! temperature too high")
             if config.ignore_temp_too_high == False:
                 self.abort_run()
+                publish.single(
+                    MQTT_TOPIC,
+                    payload="Too hot",
+                    hostname=MQTT_BROKER,
+                    port=MQTT_PORT,
+                    auth={
+                        'username': MQTT_USERNAME,
+                        'password': MQTT_PASSWORD
+                    }
+                )
         
         if self.board.temp_sensor.status.over_error_limit():
             log.info("emergency!!! too many errors in a short period")
             if config.ignore_tc_too_many_errors == False:
                 self.abort_run()
+                publish.single(
+                    MQTT_TOPIC,
+                    payload="Too many errors",
+                    hostname=MQTT_BROKER,
+                    port=MQTT_PORT,
+                    auth={
+                        'username': MQTT_USERNAME,
+                        'password': MQTT_PASSWORD
+                    }
+                )
 
     def reset_if_schedule_ended(self):
         if self.runtime > self.totaltime:
